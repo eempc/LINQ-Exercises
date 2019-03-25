@@ -26,7 +26,10 @@ namespace LINQ
             // The LINQ way
             var evenNumbers = from num in numbers
                            where (num % 2) == 0
+                           orderby num
                            select num;
+
+            IEnumerable<int> evenNumbers2 = numbers.Where(num => num % 2 == 0).OrderBy(n => n);
 
             int count = evenNumbers.Count();
 
@@ -76,10 +79,10 @@ namespace LINQ
             squareList.Add(new Square(4));
             squareList.Add(new Square(10));
 
-            // (1) Select all
+            // (1) Select all. You can also concat another list var list = (LINQ1).Concat(LINQ2)
             var allEntries = from sq in squareList select sq;
 
-            // (2) select with conditional(s)
+            // (2) select with conditional(s) - select even squares bigger than 10
             IEnumerable<Square> squareQuery =
                 from sq in squareList
                 where sq.Area() % 2 == 0 && sq.x > 10
@@ -126,7 +129,7 @@ namespace LINQ
                            orderby xGroup.Key
                            select xGroup;
 
-            Console.WriteLine("---");
+            Console.WriteLine("Group By---");
             foreach (var xG in entries4)
             {
                 Console.WriteLine(xG.Key); //Only 10 should appear because there are > 2 entries in the List for 10
@@ -161,8 +164,8 @@ namespace LINQ
             employees.Add(new Employee(4, "Ellie (m)", 1));
 
             // Looks like departmentName is a new property of the Employee class. 
-            // This is a new list of anonymous type and only 2 attributes (it pulled the employee's name and department name) as depicted select new {}
-            var list = (from e in employees
+            // This is a NEW list of anonymous type and only 2 attributes (it pulled the employee's name and department name) as depicted select new {}
+            var innerJoin = (from e in employees
                         //where e.employeeName[0] == 'E'
                         join d in departments
                         on e.deptID equals d.deptID
@@ -170,7 +173,9 @@ namespace LINQ
                         );
 
             
-            foreach (var emp in list)
+
+            // Inner join is a new transient object variable with just two properties, the employee name (existing) and department name (new)
+            foreach (var emp in innerJoin)
             {
                 Console.WriteLine(emp.GetType());
                 Console.WriteLine("Employee name = {0} , of department = {1}", emp.employeeName, emp.departmentName);
@@ -178,6 +183,39 @@ namespace LINQ
 
             // Sometimes OOP really makes this complex - this is the noob version
             string[] deptArray = { "Sales", "Marketing", "Etc" };
+
+            // Just use LINQ to sort for now. None of this XML or SQL data transformation. Or even performing operations like multiply, divide, etc.
+
+            /// Did you know there is a Table class, so the below could be something like Table<Person> persons = db.GetTable<Persons>();
+            /// //Do I even have a database context? I do in the MVC app but for the desktop app, how is that done? db = what? Do I need a connection?
+
+            List<string> names = new List<string> { "Ann", "Bob", "Cara", "Dave", "Ed" };
+            List<string> names2 = new List<string> { "Alan", "Bill", "Cath", "Dot", "Elle" };
+
+            IEnumerable<string> nameQuery = (from name in names
+                                             where name[0] == 'B'
+                                             select name).Concat(from n in names2
+                                                                 where n[0] == 'B'
+                                                                 select n);
+
+            IEnumerable<string> nameQuery2 = names
+                .Where(n => n[0] == 'C' || n[0] == 'D')
+                .Concat(names2.Where(n => n[0] == 'C' || n[0] == 'D'))
+                .OrderByDescending(x => x);
+
+            Console.WriteLine("---");
+
+            foreach (string name in nameQuery)
+            {
+                Console.WriteLine(name);
+            }
+
+            Console.WriteLine("---");
+
+            foreach (string name in nameQuery2)
+            {
+                Console.WriteLine(name);
+            }
 
             Console.ReadKey();
         }

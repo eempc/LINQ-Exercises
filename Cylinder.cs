@@ -10,17 +10,17 @@ namespace LINQ
     {
         public Cylinder(double radius, double height) : base (radius)
         {
-            y = height;
+            z = height;
         }
 
         public override double Area()
         {
-            return base.Area() * 2 + (x * 2 * pi * y);
+            return base.Area() * 2 + (x * 2 * pi * z);
         }
 
         public double Volume()
         {
-            return base.Area() * y;
+            return base.Area() * z;
         }
     }
 }

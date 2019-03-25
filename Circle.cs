@@ -8,7 +8,7 @@ namespace LINQ
 {
     class Circle : Shape
     {
-        public Circle(double radius) : base(radius, 0)
+        public Circle(double radius) : base(radius, 0, 0)
         {
 
         }
@@ -16,6 +16,16 @@ namespace LINQ
         public override double Area()
         {
             return pi * x * x;
+        }
+
+        public double Diameter()
+        {
+            return 2 * x;
+        }
+
+        public double Circumference()
+        {
+            return pi * x * 2;
         }
 
         //public override double Volume()
