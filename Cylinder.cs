@@ -22,5 +22,7 @@ namespace LINQ
         {
             return base.Area() * z;
         }
+
+        //public Func<double, double> VolumeAlt = z => base.Area() * z;
     }
 }

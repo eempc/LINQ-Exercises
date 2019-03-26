@@ -18,10 +18,8 @@ namespace LINQ
             return pi * x * x;
         }
 
-        public double Diameter()
-        {
-            return 2 * x;
-        }
+        public Func<double, double> Diameter = x => 2 * x;
+
 
         public double Circumference()
         {

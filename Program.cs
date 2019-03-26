@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace LINQ
 {
     class Program
@@ -129,11 +130,20 @@ namespace LINQ
                            orderby xGroup.Key
                            select xGroup;
 
+            //var entries4b = squareList.GroupBy(g => g.x).OrderBy(o => o);
+
             Console.WriteLine("Group By---");
             foreach (var xG in entries4)
             {
                 Console.WriteLine(xG.Key); //Only 10 should appear because there are > 2 entries in the List for 10
             }
+
+            Console.WriteLine("Group By again---");
+
+            //foreach (var group in entries4b)
+            //{
+            //    Console.WriteLine(group.Key);
+            //}
 
             Console.WriteLine("---");
 
@@ -216,6 +226,61 @@ namespace LINQ
             {
                 Console.WriteLine(name);
             }
+
+            // Linq and method arguments using .Select as a method to return the number, must use var
+            // Noob way would be to use a loop and do the thing, push to an array or replace existing array then print
+            // E.g. square each number in numbers array in one line using lambda and the LINQ .Select
+            var squaredNumbers = numbers.Select(x => x * x);
+            Console.WriteLine(string.Join(", ", squaredNumbers));
+
+
+            // Func lambda delegate? versus a good old fashioned method?
+            Func<int, string> myIntToString = x => (x*2).ToString();
+            Func<string, string> myStringSurround = x => "(" + x + ")";
+            Func<int, string> combined = x => myStringSurround(myIntToString(x));
+
+            Console.WriteLine(combined(55));
+
+            // Another example of two separate functions
+            float intToFloatTimes3 (int x) => x * 3.0f;
+            bool isFloatBiggerThan15half(float x) => (x > 15.5f);
+
+            // It is possible to write a third function to do the above in one go. Which is fine if the functions are simple as this example, but rarely is in reality
+            bool possibleCombo (int x) => (x * 3.0f > 15.5);
+
+            // But you also deny access to the two initial functions. It is possible to join those two initial functions.
+            // Which I have been doing all the time anyway. The next two Console.WriteLine are using function composition already
+            bool possibleCombo2(int x) => isFloatBiggerThan15half(intToFloatTimes3(x));
+
+            // Also what is this kind of notation? This is madness. Lambdas are killing me.
+            Console.WriteLine(possibleCombo2(4));
+            Console.WriteLine(possibleCombo2(6));
+
+            // The question is when to use a good old fashioned method, a Func (delegate?) as above, or this weird lambda thing that I just learned
+            // Anyway on to the Compose bit which I don't understand too well, but let's have a go
+            Func<int, float> fff = x => x * 3.0f;
+            Func<float, bool> ggg = y => (y > 15.5f);
+
+            Func<int, bool> hhh = ggg.Compose(fff); 
+            //I had to make my own class to add the method .Compose
+            //But I did learn how to make a method which utilises the . 
+
+            Console.WriteLine("-===-");
+
+            Console.WriteLine(hhh(2));
+            Console.WriteLine(hhh(3));
+            Console.WriteLine(hhh(7));
+
+            ////// Enough func for now
+
+            // LINQ can be used in examples like:
+            // List of students, with properties: .year and an .examScore. Find the average grade for each year
+
+            ////var queryResult = from s in students // s in array students
+            ////                  group s by s.year into studentGroup // I.e. new studentYear
+            ////                  select new { yearLevel = studentGroup.Key, averageGrade = studentGroup.Average(x => x.examScore.Average()) }; 
+            ///// Something like this, the average formula might be wrong
+
 
             Console.ReadKey();
         }
