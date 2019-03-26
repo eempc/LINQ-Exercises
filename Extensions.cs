@@ -13,5 +13,10 @@ namespace LINQ
         {
             return x => func1(func2(x));
         }
+
+        public static Tuple<T1> Create<T1>(T1 item1)
+        {
+            return new Tuple<T1>(item1);
+        }
     }
 }
